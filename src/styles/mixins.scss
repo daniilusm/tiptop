@@ -1,3 +1,42 @@
-@function clampSize($min, $max) {
-  @return max(#{$min}px,#{$max});
+/** @format */
+@use "sass:map";
+
+@mixin notLast() {
+  &:not(:last-child) {
+    @content;
+  }
+}
+
+@mixin notFirst() {
+  &:not(:first-child) {
+    @content;
+  }
+}
+
+@mixin pseudocell($type, $pos: absolute) {
+  &::#{$type} {
+    content: "";
+    position: $pos;
+    @content;
+  }
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content;
+  }
+
+  &:-moz-placeholder {
+    /* Firefox 18- */
+    @content;
+  }
+
+  &::-moz-placeholder {
+    /* Firefox 19+ */
+    @content;
+  }
+
+  &:-ms-input-placeholder {
+    @content;
+  }
 }

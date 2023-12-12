@@ -1,0 +1,13 @@
+/** @format */
+
+:root {
+  --screen-size: #{$baseScreenSize};
+
+  @include tablet {
+    --screen-size: #{$tabletScreenSize};
+  }
+
+  @include mobile {
+    --screen-size: #{$mobileScreenSize};
+  }
+}

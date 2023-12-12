@@ -1,0 +1,56 @@
+/** @format */
+@use "media" as *;
+@use "helpers" as *;
+
+@mixin glob-font-style($font-weigh) {
+  font-family: GTAlpina;
+  font-style: normal;
+
+  @if $font-weigh==bold {
+    font-weight: 700;
+  }
+  @if $font-weigh==medium {
+    font-weight: 500;
+  }
+  @if $font-weigh==regular {
+    font-weight: 400;
+  }
+}
+
+@mixin heading-1 {
+  @include glob-font-style(bold);
+
+  font-size: vw(60);
+  line-height: 105%;
+
+  @include tablet {
+    font-size: vw(40);
+  }
+
+  @include mobile {
+    font-size: vw(20);
+  }
+}
+
+@mixin heading-2 {
+  @include glob-font-style(bold);
+
+  font-size: vw(40);
+  line-height: 105%;
+
+  @include tablet {
+    font-size: vw(30);
+  }
+}
+
+@mixin paragraph {
+  @include glob-font-style(medium);
+
+  font-size: vw(24);
+  line-height: vw(32);
+
+  @include tablet {
+    font-size: vw(18);
+    line-height: normal;
+  }
+}

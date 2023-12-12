@@ -1,0 +1,31 @@
+/** @format */
+
+@font-face {
+  font-family: "GTAlpina";
+  src: url("/fonts/GTAlpina/GTAlpinaBold.woff2") format("woff2"),
+    url("/fonts/GTAlpina/GTAlpinaBold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-stretch: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GTAlpina";
+  src: url("/fonts/GTAlpina/GTAlpinaMedium.woff2") format("woff2"),
+    url("/fonts/GTAlpina/GTAlpinaMedium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GTAlpina";
+  src: url("/fonts/GTAlpina/GTAlpinaRegular.woff2") format("woff2"),
+    url("/fonts/GTAlpina/GTAlpinaRegular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-stretch: normal;
+  font-display: swap;
+}

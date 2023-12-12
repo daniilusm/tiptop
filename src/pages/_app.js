@@ -1,8 +1,11 @@
-import 'styles/reset.scss';
-import 'styles/globals.scss'
+import useCalcVh from 'hooks/useCalcVh';
+
+import 'styles/config/index.scss';
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  useCalcVh();
+
+  return <Component {...pageProps} />;
 }
 
-export default MyApp
+export default MyApp;

@@ -1,0 +1,17 @@
+/** @format */
+
+$baseScreenSize: 1920;
+$tabletScreenSize: 1024;
+$mobileScreenSize: 390;
+
+@function vw($px) {
+  @return calc(((#{$px} / var(--screen-size)) * 100) * 1vw);
+}
+
+@function clampSize($min, $max) {
+  @return max(#{$min}px, (#{$max} / (--screen-size * 100 * 1vw)));
+}
+
+@function get-real-vh($vh) {
+  @return calc(var(--vh, 1vh) * #{$vh});
+}
