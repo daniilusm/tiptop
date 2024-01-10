@@ -23,13 +23,13 @@ const Home = ({ className }) => {
     // });
 
     setInterval(() => {
-      const timer = Date.now() * 0.03;
+      const timer = Date.now() * 0.01;
 
       if (ballRef.current) {
         ballRef.current.position.set(
-          Math.cos(timer * 0.1) * 3.2,
-          Math.abs(Math.cos(timer * 0.2)) * 5 + 2,
-          Math.sin(timer * 0.1) * 3.2
+          Math.cos(timer * 0.1) * 0.7,
+          Math.abs(Math.cos(timer * 0.2)) * 1.15 + 0.5,
+          Math.sin(timer * 0.1) * 0.7
         );
       }
     }, 10);
@@ -46,11 +46,11 @@ const Home = ({ className }) => {
         />
         <PerspectiveCamera position={[0, 0, 0]} />
         <mesh
-          position={[0, 10, 0]}
+          position={[0, 2, 0]}
           rotation={[Math.PI / 2, 0, 0]}
         >
           <planeGeometry
-            args={[10, 10]}
+            args={[2, 2]}
             attach="geometry"
           />
           <meshPhongMaterial color="white" />
@@ -60,47 +60,47 @@ const Home = ({ className }) => {
           rotation={[-Math.PI / 2, 0, 0]}
         >
           <planeGeometry
-            args={[10, 10]}
+            args={[2, 2]}
             attach="geometry"
           />
           <meshPhongMaterial color="white" />
         </mesh>
         <mesh
-          position={[0, 5, 5]}
+          position={[0, 1, 1]}
           rotation={[0, Math.PI, 0]}
         >
           <planeGeometry
-            args={[10, 10]}
+            args={[2, 2]}
             attach="geometry"
           />
           <meshPhongMaterial color="white" />
         </mesh>
         <mesh
-          position={[5, 5, 0]}
+          position={[1, 1, 0]}
           rotation={[0, -Math.PI / 2, 0]}
         >
           <planeGeometry
-            args={[10, 10]}
+            args={[2, 2]}
             attach="geometry"
           />
           <meshPhongMaterial color="white" />
         </mesh>
         <mesh
-          position={[-5, 5, 0]}
+          position={[-1, 1, 0]}
           rotation={[0, Math.PI / 2, 0]}
         >
           <planeGeometry
-            args={[10, 10]}
+            args={[2, 2]}
             attach="geometry"
           />
           <meshPhongMaterial color="white" />
         </mesh>
         <mesh
-          position={[0, 5, -5]}
+          position={[0, 1, -1]}
           rotation={[0, 0, Math.PI / 2]}
         >
           <planeGeometry
-            args={[10, 10]}
+            args={[2, 2]}
             attach="geometry"
           />
           <meshPhongMaterial color="white" />
@@ -109,7 +109,7 @@ const Home = ({ className }) => {
           ref={ballRef}
           position={[0, 0, 0]}
         >
-          <sphereGeometry args={[1.5, 26, 26]} />
+          <sphereGeometry args={[0.3, 26, 26]} />
           <meshStandardMaterial color="black" />
         </mesh>
       </Canvas>
