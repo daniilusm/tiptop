@@ -100,7 +100,7 @@ const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
         rotation={[0, 0, 0]}
         ref={planeRef}
       >
-        <planeGeometry args={[8, 8]} />
+        <planeGeometry args={[14, 8]} />
         <meshBasicMaterial
           attach="material"
           map={texture}
