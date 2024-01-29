@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
 
 import s from './Image.module.scss';
 import {
@@ -10,14 +10,16 @@ import {
   PerspectiveCamera,
   useMask,
 } from '@react-three/drei';
+import { TextureLoader } from 'three';
 
 const TIMELINES = { START: 14, END: 31.5 };
 const ROTATIONS = {
-  CUBE: { FIRST: 11.5, SECOND: 6 },
+  CUBE: { FIRST: 10, SECOND: 6 },
   SCENE: { FIRST: 10, SECOND: 5 },
 };
 
-const Models = ({ scrollProgress, rootRef, elemRef }) => {
+const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
+  const texture = useLoader(TextureLoader, data.src);
   const planeRef = useRef(null);
 
   const stencil = useMask(1);
@@ -67,7 +69,9 @@ const Models = ({ scrollProgress, rootRef, elemRef }) => {
       state.scene.rotation.y = 0;
       planeRef.current.rotation.y = 0;
       state.scene.rotation.x = -scrollProgress / ROTATIONS.SCENE.SECOND;
-      planeRef.current.rotation.x = scrollProgress / ROTATIONS.CUBE.SECOND;
+      planeRef.current.rotation.x =
+        (scrollProgress - TIMELINES.END) / ROTATIONS.CUBE.SECOND;
+      console.info(scrollProgress);
     }
     if (scrollProgress > TIMELINES.START) {
       state.scene.position.set(0, 0, scrollProgress / 35);
@@ -90,14 +94,20 @@ const Models = ({ scrollProgress, rootRef, elemRef }) => {
         scale={3}
       >
         <ringGeometry args={[0.8, 0.85, 64]} />
-        <meshPhongMaterial color="red" />
+        <meshPhongMaterial color="black" />
       </mesh>
       <mesh
         position={[0, 0, -1]}
-        rotation={[0, 0, Math.PI / 2]}
+        rotation={[0, 0, 0]}
         ref={planeRef}
       >
-        <boxGeometry
+        <planeGeometry args={[8, 8]} />
+        <meshBasicMaterial
+          attach="material"
+          map={texture}
+          {...stencil}
+        />
+        {/* <boxGeometry
           args={[1, 1, 1]}
           attach="geometry"
         />
@@ -106,13 +116,13 @@ const Models = ({ scrollProgress, rootRef, elemRef }) => {
           wireframe
           transparent
           {...stencil}
-        />
+        /> */}
       </mesh>
     </>
   );
 };
 
-const Image = ({ className }) => {
+const Image = ({ className, data }) => {
   const rootRef = useRef(null);
   const elemRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -154,6 +164,7 @@ const Image = ({ className }) => {
             scrollProgress={scrollProgress}
             rootRef={rootRef.current}
             elemRef={elemRef.current}
+            data={data}
           />
         </Canvas>
       </div>
