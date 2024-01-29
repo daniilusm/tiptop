@@ -11,7 +11,13 @@ import {
   useMask,
 } from '@react-three/drei';
 
-const Meshes = ({ scrollProgress, rootRef, elemRef }) => {
+const TIMELINES = { START: 14, END: 31.5 };
+const ROTATIONS = {
+  CUBE: { FIRST: 11.5, SECOND: 6 },
+  SCENE: { FIRST: 10, SECOND: 5 },
+};
+
+const Models = ({ scrollProgress, rootRef, elemRef }) => {
   const planeRef = useRef(null);
 
   const stencil = useMask(1);
@@ -51,18 +57,17 @@ const Meshes = ({ scrollProgress, rootRef, elemRef }) => {
   // }, []);
 
   useEffect(() => {
-    console.info(scrollProgress);
-    if (scrollProgress < 14) {
+    if (scrollProgress < TIMELINES.START) {
       state.scene.rotation.x = 0;
       planeRef.current.rotation.x = 0;
-      state.scene.rotation.y = scrollProgress / 10;
-      planeRef.current.rotation.y = -scrollProgress / 11.5;
+      state.scene.rotation.y = scrollProgress / ROTATIONS.SCENE.FIRST;
+      planeRef.current.rotation.y = -scrollProgress / ROTATIONS.CUBE.FIRST;
     }
-    if (scrollProgress > 14 && scrollProgress < 31.5) {
+    if (scrollProgress > TIMELINES.START && scrollProgress < TIMELINES.END) {
       state.scene.rotation.y = 0;
       planeRef.current.rotation.y = 0;
-      state.scene.rotation.x = -scrollProgress / 5;
-      planeRef.current.rotation.x = scrollProgress / 6;
+      state.scene.rotation.x = -scrollProgress / ROTATIONS.SCENE.SECOND;
+      planeRef.current.rotation.x = scrollProgress / ROTATIONS.CUBE.SECOND;
     }
   }, [scrollProgress]);
 
@@ -141,7 +146,7 @@ const Image = ({ className }) => {
             position={[1, 9, 0]}
           />
           <PerspectiveCamera position={[0, 0, 0]} />
-          <Meshes
+          <Models
             scrollProgress={scrollProgress}
             rootRef={rootRef.current}
             elemRef={elemRef.current}
