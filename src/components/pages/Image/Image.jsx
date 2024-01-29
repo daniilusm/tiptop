@@ -39,7 +39,7 @@ const Image = ({ className }) => {
         rootRef.current,
         elemRef.current
       );
-      planeRef.current.position.set(x / 100, -y / 100, 0);
+      planeRef.current.position.set(x / 100, -y / 100, -1);
     }
   }, []);
 
@@ -97,7 +97,7 @@ const Image = ({ className }) => {
             <meshPhongMaterial color="black" />
           </mesh>
           <mesh
-            position={[0, 0, 1]}
+            position={[0, 0, -1]}
             rotation={[0, 0, Math.PI / 2]}
             ref={planeRef}
           >
@@ -107,6 +107,7 @@ const Image = ({ className }) => {
             />
             <meshPhongMaterial
               color="red"
+              wireframe
               {...stencil}
             />
           </mesh>
