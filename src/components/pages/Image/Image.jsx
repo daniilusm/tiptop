@@ -12,7 +12,7 @@ import {
 } from '@react-three/drei';
 import { TextureLoader } from 'three';
 
-const TIMELINES = { START: 14, END: 31.5 };
+const TIMELINES = { START: 14, END: 31.45 };
 const ROTATIONS = {
   CUBE: { FIRST: 10, SECOND: 5 },
   SCENE: { FIRST: 10, SECOND: 5 },
