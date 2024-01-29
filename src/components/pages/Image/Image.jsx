@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 
 import s from './Image.module.scss';
 import {
@@ -10,12 +10,13 @@ import {
   PerspectiveCamera,
   useMask,
 } from '@react-three/drei';
-import useCalcVh from 'hooks/useCalcVh';
 
-const Image = ({ className }) => {
+const Meshes = ({ scrollProgress, rootRef, elemRef }) => {
   const planeRef = useRef(null);
-  const rootRef = useRef(null);
-  const elemRef = useRef(null);
+
+  const stencil = useMask(1);
+
+  const state = useThree();
 
   const getMousePositions = (clientX, clientY, parent, element) => {
     const currentWidth = parent.clientWidth - element.clientWidth;
@@ -29,34 +30,99 @@ const Image = ({ className }) => {
     return { x, y };
   };
 
-  const handleScroll = useCallback(e => {
-    const { clientX, clientY } = e;
+  // const handleMouseMove = useCallback(
+  //   e => {
+  //     const { clientX, clientY } = e;
 
-    if (planeRef.current) {
-      const { x, y } = getMousePositions(
-        clientX,
-        clientY,
-        rootRef.current,
-        elemRef.current
-      );
-      planeRef.current.position.set(x / 100, -y / 100, -1);
+  //     if (planeRef.current && rootRef && elemRef) {
+  //       const { x, y } = getMousePositions(clientX, clientY, rootRef, elemRef);
+  //       console.info(x, y);
+  //       planeRef.current.position.set(x / 100, -y / 100, -1);
+  //     }
+  //   },
+  //   [rootRef, elemRef]
+  // );
+
+  // useEffect(() => {
+  //   document.addEventListener('mousemove', e => handleMouseMove(e));
+
+  //   return () =>
+  //     document.removeEventListener('mousemove', e => handleMouseMove(e));
+  // }, []);
+
+  useEffect(() => {
+    console.info(scrollProgress);
+    if (scrollProgress < 14) {
+      state.scene.rotation.x = 0;
+      planeRef.current.rotation.x = 0;
+      state.scene.rotation.y = scrollProgress / 10;
+      planeRef.current.rotation.y = -scrollProgress / 11.5;
+    }
+    if (scrollProgress > 14 && scrollProgress < 31.5) {
+      state.scene.rotation.y = 0;
+      planeRef.current.rotation.y = 0;
+      state.scene.rotation.x = -scrollProgress / 5;
+      planeRef.current.rotation.x = scrollProgress / 6;
+    }
+  }, [scrollProgress]);
+
+  return (
+    <>
+      <Mask
+        id={1}
+        position={[0, 0, 1]}
+      >
+        {/* <planeGeometry args={[7, 10]} /> */}
+        <circleGeometry args={[2.5, 64]} />
+        <meshPhongMaterial color="black" />
+      </Mask>
+      <mesh
+        position={[0, 0, 1]}
+        scale={3}
+      >
+        <ringGeometry args={[0.8, 0.85, 64]} />
+        <meshPhongMaterial color="black" />
+      </mesh>
+      <mesh
+        position={[0, 0, -1]}
+        rotation={[0, 0, Math.PI / 2]}
+        ref={planeRef}
+      >
+        <boxGeometry
+          args={[1, 1, 1]}
+          attach="geometry"
+        />
+        <meshPhongMaterial
+          color="red"
+          wireframe
+          {...stencil}
+        />
+      </mesh>
+    </>
+  );
+};
+
+const Image = ({ className }) => {
+  const rootRef = useRef(null);
+  const elemRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = useCallback(() => {
+    if (elemRef.current && rootRef.current) {
+      const winScroll = elemRef.current.offsetTop;
+      const height =
+        rootRef.current.scrollHeight - document.documentElement.clientHeight;
+      const progress = (winScroll / height) * 100;
+      setScrollProgress(progress);
     }
   }, []);
 
   useEffect(() => {
-    document.addEventListener('mousemove', e => handleScroll(e));
+    document.addEventListener('scroll', handleScroll);
+
+    return () => document.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // const texture = useLoader(THREE.TextureLoader, 'public/images/avatar2.png');
-  // console.info(planeRef);
-
-  // useEffect(() => {
-  //   if (planeRef.current) {
-  //     planeRef.current.parent.rotation.set(1, 1, 1);
-  //   }
-  // }, []);
-
-  const stencil = useMask(1);
   return (
     <div
       className={cx(s.root, className)}
@@ -67,50 +133,18 @@ const Image = ({ className }) => {
         className={s.wrapper}
       >
         <Canvas>
-          <OrbitControls />
+          {/* <OrbitControls /> */}
           <ambientLight
             castShadow
             intensity={1.7}
             position={[1, 5, 7]}
           />
           <PerspectiveCamera position={[0, 0, 0]} />
-          <Mask
-            id={1}
-            position={[0, 0, 1]}
-          >
-            {/* <planeGeometry args={[7, 10]} /> */}
-            <ringGeometry args={[2, 4, 64]} />
-            <meshPhongMaterial color="black" />
-          </Mask>
-          <mesh
-            position={[0, 0, 1]}
-            scale={2.35}
-          >
-            <ringGeometry args={[0.75, 0.85, 64]} />
-            <meshPhongMaterial color="black" />
-          </mesh>
-          <mesh
-            position={[0, 0, 1]}
-            scale={5.33}
-          >
-            <ringGeometry args={[0.75, 0.85, 64]} />
-            <meshPhongMaterial color="black" />
-          </mesh>
-          <mesh
-            position={[0, 0, -1]}
-            rotation={[0, 0, Math.PI / 2]}
-            ref={planeRef}
-          >
-            <boxGeometry
-              args={[2, 2, 2]}
-              attach="geometry"
-            />
-            <meshPhongMaterial
-              color="red"
-              wireframe
-              {...stencil}
-            />
-          </mesh>
+          <Meshes
+            scrollProgress={scrollProgress}
+            rootRef={rootRef.current}
+            elemRef={elemRef.current}
+          />
         </Canvas>
       </div>
     </div>
