@@ -24,7 +24,7 @@ const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
 
   const stencil = useMask(1);
 
-  const state = useThree();
+  const { scene } = useThree();
 
   const getMousePositions = (clientX, clientY, parent, element) => {
     const currentWidth = parent.clientWidth - element.clientWidth;
@@ -60,21 +60,20 @@ const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
 
   useEffect(() => {
     if (scrollProgress < TIMELINES.START) {
-      state.scene.rotation.x = 0;
+      scene.rotation.x = 0;
       planeRef.current.rotation.x = 0;
-      state.scene.rotation.y = scrollProgress / ROTATIONS.SCENE.FIRST;
+      scene.rotation.y = scrollProgress / ROTATIONS.SCENE.FIRST;
       planeRef.current.rotation.y = -scrollProgress / ROTATIONS.CUBE.FIRST;
     }
     if (scrollProgress > TIMELINES.START && scrollProgress < TIMELINES.END) {
-      state.scene.rotation.y = 0;
+      scene.rotation.y = 0;
       planeRef.current.rotation.y = 0;
-      state.scene.rotation.x = -scrollProgress / ROTATIONS.SCENE.SECOND;
+      scene.rotation.x = -scrollProgress / ROTATIONS.SCENE.SECOND;
       planeRef.current.rotation.x =
         (scrollProgress - TIMELINES.END) / ROTATIONS.CUBE.SECOND;
-      console.info(scrollProgress);
     }
     if (scrollProgress > TIMELINES.START) {
-      state.scene.position.set(0, 0, scrollProgress / 35);
+      scene.position.set(0, 0, scrollProgress / 35);
       planeRef.current.position.set(0, 0, -(scrollProgress / 35));
     }
   }, [scrollProgress]);
