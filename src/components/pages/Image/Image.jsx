@@ -69,6 +69,10 @@ const Models = ({ scrollProgress, rootRef, elemRef }) => {
       state.scene.rotation.x = -scrollProgress / ROTATIONS.SCENE.SECOND;
       planeRef.current.rotation.x = scrollProgress / ROTATIONS.CUBE.SECOND;
     }
+    if (scrollProgress > TIMELINES.START) {
+      state.scene.position.set(0, 0, scrollProgress / 35);
+      planeRef.current.position.set(0, 0, -(scrollProgress / 35));
+    }
   }, [scrollProgress]);
 
   return (
