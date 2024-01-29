@@ -81,7 +81,7 @@ const Meshes = ({ scrollProgress, rootRef, elemRef }) => {
         scale={3}
       >
         <ringGeometry args={[0.8, 0.85, 64]} />
-        <meshPhongMaterial color="black" />
+        <meshPhongMaterial color="red" />
       </mesh>
       <mesh
         position={[0, 0, -1]}
@@ -93,8 +93,9 @@ const Meshes = ({ scrollProgress, rootRef, elemRef }) => {
           attach="geometry"
         />
         <meshPhongMaterial
-          color="red"
+          color="black"
           wireframe
+          transparent
           {...stencil}
         />
       </mesh>
@@ -136,8 +137,8 @@ const Image = ({ className }) => {
           {/* <OrbitControls /> */}
           <ambientLight
             castShadow
-            intensity={1.7}
-            position={[1, 5, 7]}
+            intensity={2}
+            position={[1, 9, 0]}
           />
           <PerspectiveCamera position={[0, 0, 0]} />
           <Meshes
