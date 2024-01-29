@@ -88,13 +88,13 @@ const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
         <circleGeometry args={[2.5, 64]} />
         <meshPhongMaterial color="black" />
       </Mask>
-      <mesh
+      {/* <mesh
         position={[0, 0, 1]}
         scale={3}
       >
         <ringGeometry args={[0.8, 0.85, 64]} />
         <meshPhongMaterial color="black" />
-      </mesh>
+      </mesh> */}
       <mesh
         position={[0, 0, -1]}
         rotation={[0, 0, 0]}
