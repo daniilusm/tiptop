@@ -18,7 +18,7 @@ const ROTATIONS = {
   SCENE: { FIRST: 10, SECOND: 5 },
 };
 
-const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
+const Models = ({ scrollProgress, rootRef, elemRef, data, withBorder }) => {
   const texture = useLoader(TextureLoader, data.src);
   const planeRef = useRef(null);
 
@@ -88,13 +88,15 @@ const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
         <circleGeometry args={[2.5, 64]} />
         <meshPhongMaterial color="black" />
       </Mask>
-      {/* <mesh
-        position={[0, 0, 1]}
-        scale={3}
-      >
-        <ringGeometry args={[0.8, 0.85, 64]} />
-        <meshPhongMaterial color="black" />
-      </mesh> */}
+      {withBorder && (
+        <mesh
+          position={[0, 0, 1]}
+          scale={3}
+        >
+          <ringGeometry args={[0.8, 0.85, 64]} />
+          <meshPhongMaterial color="black" />
+        </mesh>
+      )}
       <mesh
         position={[0, 0, -1]}
         rotation={[0, 0, 0]}
@@ -113,7 +115,6 @@ const Models = ({ scrollProgress, rootRef, elemRef, data }) => {
         <meshPhongMaterial
           color="black"
           wireframe
-          transparent
           {...stencil}
         /> */}
       </mesh>
@@ -125,6 +126,8 @@ const Image = ({ className, data }) => {
   const rootRef = useRef(null);
   const elemRef = useRef(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isOrbitControls, setIsOrbitControls] = useState(false);
+  const [withBorder, setWithBorder] = useState(false);
 
   const handleScroll = useCallback(() => {
     if (elemRef.current && rootRef.current) {
@@ -148,11 +151,23 @@ const Image = ({ className, data }) => {
       ref={rootRef}
     >
       <div
+        className={cx(s.button, { [s.open]: isOrbitControls })}
+        onClick={() => setIsOrbitControls(!isOrbitControls)}
+      >
+        Orbit Controls
+      </div>
+      <div
+        className={cx(s.buttonBorder, { [s.open]: withBorder })}
+        onClick={() => setWithBorder(!withBorder)}
+      >
+        With Border
+      </div>
+      <div
         ref={elemRef}
         className={s.wrapper}
       >
         <Canvas>
-          {/* <OrbitControls /> */}
+          {isOrbitControls && <OrbitControls />}
           <ambientLight
             castShadow
             intensity={2}
@@ -164,6 +179,7 @@ const Image = ({ className, data }) => {
             rootRef={rootRef.current}
             elemRef={elemRef.current}
             data={data}
+            withBorder={withBorder}
           />
         </Canvas>
       </div>
