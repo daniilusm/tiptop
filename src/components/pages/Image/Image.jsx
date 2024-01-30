@@ -115,9 +115,21 @@ const Models = ({ scrollProgress, rootRef, elemRef, data, withBorder }) => {
         <meshPhongMaterial
           color="black"
           wireframe
-          {...stencil}
         /> */}
       </mesh>
+      {/* <mesh
+        position={[0, 0, -1]}
+        rotation={[0, 0, 0]}
+      >
+        <boxGeometry
+          args={[1, 1, 1]}
+          attach="geometry"
+        />
+        <meshPhongMaterial
+          color="black"
+          wireframe
+        />
+      </mesh> */}
     </>
   );
 };
