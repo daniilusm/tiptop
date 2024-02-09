@@ -1,6 +1,6 @@
 /** @format */
 
-@import "fonts";
+@import 'fonts';
 
 html {
   font-size: 1vw;
@@ -14,7 +14,7 @@ body {
   background-color: $white;
   color: $black;
   overscroll-behavior: none;
-  font-family: "GTAlpina", Arial, Helvetica, sans-serif;
+  // font-family: "GTAlpina", Arial, Helvetica, sans-serif;
 }
 
 a {

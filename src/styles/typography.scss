@@ -1,9 +1,9 @@
 /** @format */
-@use "media" as *;
-@use "helpers" as *;
+@use 'media' as *;
+@use 'helpers' as *;
 
 @mixin glob-font-style($font-weigh) {
-  font-family: GTAlpina;
+  // font-family: GTAlpina;
   font-style: normal;
 
   @if $font-weigh==bold {
