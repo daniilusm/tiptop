@@ -18,7 +18,14 @@ const ROTATIONS = {
   SCENE: { FIRST: 10, SECOND: 5 },
 };
 
-const Models = ({ scrollProgress, rootRef, elemRef, data, withBorder }) => {
+const Models = ({
+  scrollProgress,
+  rootRef,
+  elemRef,
+  data,
+  withBorder,
+  isCircle,
+}) => {
   const texture = useLoader(TextureLoader, data.src);
   const planeRef = useRef(null);
 
@@ -84,8 +91,11 @@ const Models = ({ scrollProgress, rootRef, elemRef, data, withBorder }) => {
         id={1}
         position={[0, 0, 1]}
       >
-        {/* <planeGeometry args={[7, 10]} /> */}
-        <circleGeometry args={[2.5, 64]} />
+        {isCircle ? (
+          <circleGeometry args={[2.5, 64]} />
+        ) : (
+          <planeGeometry args={[2, 3]} />
+        )}
         <meshPhongMaterial color="black" />
       </Mask>
       {withBorder && (
@@ -140,6 +150,7 @@ const Image = ({ className, data }) => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isOrbitControls, setIsOrbitControls] = useState(false);
   const [withBorder, setWithBorder] = useState(false);
+  const [isCircle, setCircle] = useState(false);
 
   const handleScroll = useCallback(() => {
     if (elemRef.current && rootRef.current) {
@@ -168,11 +179,19 @@ const Image = ({ className, data }) => {
       >
         Orbit Controls
       </div>
+      {isCircle && (
+        <div
+          className={cx(s.buttonBorder, { [s.open]: withBorder })}
+          onClick={() => setWithBorder(!withBorder)}
+        >
+          With Border
+        </div>
+      )}
       <div
-        className={cx(s.buttonBorder, { [s.open]: withBorder })}
-        onClick={() => setWithBorder(!withBorder)}
+        className={cx(s.buttonCircle, { [s.open]: isCircle })}
+        onClick={() => setCircle(!isCircle)}
       >
-        With Border
+        is Circle Mask
       </div>
       <div
         ref={elemRef}
@@ -192,6 +211,7 @@ const Image = ({ className, data }) => {
             elemRef={elemRef.current}
             data={data}
             withBorder={withBorder}
+            isCircle={isCircle}
           />
         </Canvas>
       </div>

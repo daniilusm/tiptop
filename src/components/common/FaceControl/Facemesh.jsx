@@ -5,50 +5,6 @@ import { useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { DEG2RAD } from 'three/src/math/MathUtils';
 
-// export type MediaPipeFaceMesh = typeof FacemeshDatas.SAMPLE_FACE;
-
-// export type MediaPipePoints =
-//   | typeof FacemeshDatas.SAMPLE_FACE.keypoints
-//   | (typeof FacemeshDatas.SAMPLE_FACELANDMARKER_RESULT.faceLandmarks)[0];
-
-// export type FacemeshProps = {
-//   /** an array of 468+ keypoints as returned by google/mediapipe tasks-vision, default: a sample face */
-//   points?: MediaPipePoints;
-//   /** @deprecated an face object as returned by tensorflow/tfjs-models face-landmarks-detection */
-//   face?: MediaPipeFaceMesh;
-//   /** constant width of the mesh, default: undefined */
-//   width?: number;
-//   /** or constant height of the mesh, default: undefined */
-//   height?: number;
-//   /** or constant depth of the mesh, default: 1 */
-//   depth?: number;
-//   /** a landmarks tri supposed to be vertical, default: [159, 386, 200] (see: https://github.com/tensorflow/tfjs-models/tree/master/face-landmarks-detection#mediapipe-facemesh-keypoints) */
-//   verticalTri?: [number, number, number];
-//   /** a landmark index (to get the position from) or a vec3 to be the origin of the mesh. default: undefined (ie. the bbox center) */
-//   origin?: number | THREE.Vector3;
-//   /** A facial transformation matrix, as returned by FaceLandmarkerResult.facialTransformationMatrixes (see: https://developers.google.com/mediapipe/solutions/vision/face_landmarker/web_js#handle_and_display_results) */
-//   facialTransformationMatrix?: (typeof FacemeshDatas.SAMPLE_FACELANDMARKER_RESULT.facialTransformationMatrixes)[0];
-//   /** Apply position offset extracted from `facialTransformationMatrix` */
-//   offset?: boolean;
-//   /** Offset sensitivity factor, less is more sensible */
-//   offsetScalar?: number;
-//   /** Fface blendshapes, as returned by FaceLandmarkerResult.faceBlendshapes (see: https://developers.google.com/mediapipe/solutions/vision/face_landmarker/web_js#handle_and_display_results) */
-//   faceBlendshapes?: (typeof FacemeshDatas.SAMPLE_FACELANDMARKER_RESULT.faceBlendshapes)[0];
-//   /** whether to enable eyes (nb. `faceBlendshapes` is required for), default: true */
-//   eyes?: boolean;
-//   /** Force `origin` to be the middle of the 2 eyes (nb. `eyes` is required for), default: false */
-//   eyesAsOrigin?: boolean;
-//   /** debug mode, default: false */
-//   debug?: boolean;
-// } & Omit<JSX.IntrinsicElements["group"], "ref">;
-
-// export type FacemeshApi = {
-//   meshRef: React.RefObject<THREE.Mesh>;
-//   outerRef: React.RefObject<THREE.Group>;
-//   eyeRightRef: React.RefObject<FacemeshEyeApi>;
-//   eyeLeftRef: React.RefObject<FacemeshEyeApi>;
-// };
-
 const defaultLookAt = new THREE.Vector3(0, 0, -1);
 
 const normal = (function () {

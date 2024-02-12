@@ -390,7 +390,6 @@ const Webcam = forwardRef(({ videoTextureSrc, autostart = true }, fref) => {
 
 const VideoTexture = forwardRef(({ src, start }, fref) => {
   const texture = useVideoTexture(src, { start });
-  console.info(texture);
   const video = texture.source.data;
 
   const faceControls = useFaceControls();

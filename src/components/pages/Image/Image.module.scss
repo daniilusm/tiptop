@@ -36,6 +36,13 @@
 .buttonBorder {
   @extend %button;
 
+  top: 220px;
+  left: 20px;
+}
+
+.buttonCircle {
+  @extend %button;
+
   top: 120px;
   left: 20px;
 }
