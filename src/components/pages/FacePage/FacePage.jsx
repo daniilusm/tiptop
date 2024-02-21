@@ -38,6 +38,9 @@ function Scene() {
           clearcoat={1}
           envMapIntensity={2}
           roughness={0}
+          iridescence={1}
+          transparent
+          opacity={0.2}
           color="black"
         />
       </mesh>
