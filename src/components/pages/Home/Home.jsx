@@ -53,12 +53,7 @@ const Sphere = ({ index }) => {
       ref={particle}
     >
       <sphereGeometry args={[0.1, 12, 12]} />
-      <meshBasicMaterial
-        color={colors}
-        vertexColors
-        blending={THREE.AdditiveBlending}
-        depthWrite={false}
-      />
+      <meshBasicMaterial color={colors} />
     </mesh>
   );
 };
