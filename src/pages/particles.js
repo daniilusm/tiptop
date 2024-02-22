@@ -1,7 +1,7 @@
-import Home from 'pages/Home';
+import Particles from 'pages/Particles';
 
-const HomePage = () => {
-  return <Home />;
+const ParticlesPage = () => {
+  return <Particles />;
 };
 
 export async function getStaticProps() {
@@ -15,4 +15,4 @@ export async function getStaticProps() {
   }
 }
 
-export default HomePage;
+export default Particles;

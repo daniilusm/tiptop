@@ -8,6 +8,7 @@ import {
   Environment,
   OrbitControls,
   PerspectiveCamera,
+  useHelper,
   useTexture,
 } from '@react-three/drei';
 
@@ -22,7 +23,13 @@ import florTextures2 from 'public/textures/flor/Metal_Plate_048_height.png';
 import florTextures3 from 'public/textures/flor/Metal_Plate_048_normal.jpg';
 import florTextures4 from 'public/textures/flor/Metal_Plate_048_roughness.jpg';
 import florTextures5 from 'public/textures/flor/Metal_Plate_048_ambientOcclusion.jpg';
-import { Vector3 } from 'three';
+import {
+  Fog,
+  PointLightHelper,
+  RepeatWrapping,
+  SpotLightHelper,
+  Vector3,
+} from 'three';
 
 const Wall = ({ position, rotation, isFlor }) => {
   const props = useTexture({
@@ -32,6 +39,21 @@ const Wall = ({ position, rotation, isFlor }) => {
     roughnessMap: isFlor ? florTextures4.src : wallTextures4.src,
     aoMap: isFlor ? florTextures5.src : wallTextures5.src,
   });
+
+  props.map.repeat.set(isFlor ? 8 : 2, isFlor ? 8 : 2);
+  props.aoMap.repeat.set(isFlor ? 8 : 2, isFlor ? 8 : 2);
+  props.normalMap.repeat.set(isFlor ? 8 : 2, isFlor ? 8 : 2);
+  props.roughnessMap.repeat.set(isFlor ? 8 : 2, isFlor ? 8 : 2);
+
+  props.map.wrapS = RepeatWrapping;
+  props.aoMap.wrapS = RepeatWrapping;
+  props.normalMap.wrapS = RepeatWrapping;
+  props.roughnessMap.wrapS = RepeatWrapping;
+
+  props.map.wrapT = RepeatWrapping;
+  props.aoMap.wrapT = RepeatWrapping;
+  props.normalMap.wrapT = RepeatWrapping;
+  props.roughnessMap.wrapT = RepeatWrapping;
 
   return (
     <mesh
@@ -44,47 +66,66 @@ const Wall = ({ position, rotation, isFlor }) => {
   );
 };
 
+const Sceen = () => {
+  // const spotLight = useRef();
+
+  // useHelper(spotLight, PointLightHelper, 1, 'hotpink');
+  return (
+    <>
+      <OrbitControls />
+      <ambientLight position={[1, 1, 2]} />
+      {/* <spotLight
+        ref={spotLight}
+        color="0xffffff"
+        intensity={1}
+        position={[1, 0, 1]}
+        penumbra={0.5}
+      /> */}
+
+      <pointLight
+        // ref={spotLight}
+        color="#ff7d46"
+        intensity={9}
+        position={[3, 0, 1]}
+      />
+      <PerspectiveCamera position={[0, 0, 0]} />
+      {/* <Environment
+      files="https://storage.googleapis.com/abernier-portfolio/lebombo_2k.hdr"
+      background
+    /> */}
+
+      <Wall
+        position={[0, 1, 4]}
+        rotation={[Math.PI / 2, 0, 0]}
+        isFlor
+      />
+      <Wall
+        position={[0, -1, 4]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        isFlor
+      />
+      <Wall
+        position={[0, 0, 8]}
+        rotation={[0, Math.PI, 0]}
+      />
+      <Wall
+        position={[4, 0, 4]}
+        rotation={[0, -Math.PI / 2, 0]}
+      />
+      <Wall
+        position={[-4, 0, 4]}
+        rotation={[0, Math.PI / 2, 0]}
+      />
+      <Wall />
+    </>
+  );
+};
+
 const DarkRoom = ({ className }) => {
   return (
     <div className={cx(s.root, className)}>
       <Canvas>
-        <OrbitControls />
-        <ambientLight position={[1, 1, 2]} />
-        <spotLight
-          color="0xffffff"
-          intensity={1}
-          position={[1, 0, 1]}
-          penumbra={0.5}
-        />
-        <PerspectiveCamera position={[0, 0, 0]} />
-        {/* <Environment
-          files="https://storage.googleapis.com/abernier-portfolio/lebombo_2k.hdr"
-          background
-        /> */}
-
-        <Wall
-          position={[0, 1, 4]}
-          rotation={[Math.PI / 2, 0, 0]}
-          isFlor
-        />
-        <Wall
-          position={[0, -1, 4]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          isFlor
-        />
-        <Wall
-          position={[0, 0, 8]}
-          rotation={[0, Math.PI, 0]}
-        />
-        <Wall
-          position={[4, 0, 4]}
-          rotation={[0, -Math.PI / 2, 0]}
-        />
-        <Wall
-          position={[-4, 0, 4]}
-          rotation={[0, Math.PI / 2, 0]}
-        />
-        <Wall />
+        <Sceen />
       </Canvas>
     </div>
   );
