@@ -10,33 +10,7 @@ import {
   PerspectiveCamera,
 } from '@react-three/drei';
 
-import textures1 from 'public/textures/Fabric_Quilt_003_basecolor.jpg';
-import textures2 from 'public/textures/Fabric_Quilt_003_height.png';
-import textures3 from 'public/textures/Fabric_Quilt_003_normal.jpg';
-import textures4 from 'public/textures/Fabric_Quilt_003_roughness.jpg';
-import textures5 from 'public/textures/Fabric_Quilt_003_ambientOcclusion.jpg';
-
 const Sphere = ({ ballRef }) => {
-  // const props = useTexture({
-  //   map: textures1.src,
-  //   displacementMap: textures2.src,
-  //   normalMap: textures3.src,
-  //   roughnessMap: textures4.src,
-  //   aoMap: textures5.src,
-  // });
-
-  // console.info(props);
-
-  // return (
-  //   <mesh ref={ballRef}>
-  //     <torusGeometry
-  //       args={[1, 0.5, 16, 100]}
-  //       position={[0, 0, 0]}
-  //     />
-  //     <meshStandardMaterial {...props} />
-  //   </mesh>
-  // );
-
   return (
     <mesh ref={ballRef}>
       <icosahedronGeometry
