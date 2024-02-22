@@ -11,9 +11,9 @@ import s from './Home.module.scss';
 const PARAMETERS = {
   PARTICLES: 10000,
   RADIUS: 80,
-  BRANCHES: 6,
+  BRANCHES: 8,
   SPIN: 0.1,
-  RANDOMNESS: 0.2,
+  RANDOMNESS: 0.4,
   INSIDE_COLOR: '#ff6030',
   OUTSIDE_COLOR: '#1b3984',
 };
