@@ -1,18 +1,21 @@
 import React, { useEffect, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei';
 
 import s from './Home.module.scss';
 
+import vertexShader from '!!raw-loader!./vertexShader.glsl';
+import fragmentShader from '!!raw-loader!./fragmentShader.glsl';
+
 const PARAMETERS = {
   PARTICLES: 10000,
-  RADIUS: 80,
+  RADIUS: 2,
   BRANCHES: 8,
-  SPIN: 0.1,
+  SPIN: 0.01,
   RANDOMNESS: 0.4,
   INSIDE_COLOR: '#ff6030',
   OUTSIDE_COLOR: '#1b3984',
@@ -75,16 +78,84 @@ const Sphere = ({ index }) => {
 //   );
 // };
 
+// const Particles = () => {
+//   return (
+//     <group scale={0.05}>
+//       {[...Array(PARAMETERS.PARTICLES)].map((_, i) => (
+//         <Sphere
+//           key={i}
+//           index={i}
+//         />
+//       ))}
+//     </group>
+//   );
+// };
+
 const Particles = () => {
+  const points = useRef();
+
+  const particlesPosition = useMemo(() => {
+    const positions = new Float32Array(PARAMETERS.PARTICLES * 3);
+
+    for (let i = 0; i < PARAMETERS.PARTICLES; i++) {
+      const radius = Math.random() * PARAMETERS.RADIUS;
+      const spinAngle = radius * PARAMETERS.SPIN;
+      const branchAngle =
+        ((i % PARAMETERS.BRANCHES) / PARAMETERS.BRANCHES) * Math.PI * 2;
+
+      const randomX = (Math.random() - 0.5) * PARAMETERS.RANDOMNESS * radius;
+      const randomY = (Math.random() - 0.5) * PARAMETERS.RANDOMNESS * radius;
+      const randomZ = (Math.random() - 0.5) * PARAMETERS.RANDOMNESS * radius;
+
+      positions.set(
+        [
+          Math.cos(branchAngle + spinAngle) * radius + randomX,
+          randomY,
+          Math.sin(branchAngle + spinAngle) * radius + randomZ,
+        ],
+        i * 3
+      );
+    }
+
+    return positions;
+  }, []);
+
+  const uniforms = useMemo(
+    () => ({
+      uTime: {
+        value: 0.0,
+      },
+      uRadius: {
+        value: PARAMETERS.RADIUS,
+      },
+    }),
+    []
+  );
+
+  useFrame(state => {
+    const { clock } = state;
+
+    points.current.material.uniforms.uTime.value = clock.elapsedTime;
+  });
+
   return (
-    <group scale={0.05}>
-      {[...Array(PARAMETERS.PARTICLES)].map((_, i) => (
-        <Sphere
-          key={i}
-          index={i}
+    <points ref={points}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={particlesPosition.length / 3}
+          array={particlesPosition}
+          itemSize={3}
         />
-      ))}
-    </group>
+      </bufferGeometry>
+      <shaderMaterial
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+        fragmentShader={fragmentShader}
+        vertexShader={vertexShader}
+        uniforms={uniforms}
+      />
+    </points>
   );
 };
 
@@ -94,11 +165,16 @@ const Home = ({ className }) => {
       <Canvas>
         <OrbitControls />
         <ambientLight position={[1, 1, 2]} />
-        {/* <Environment
-          files="https://storage.googleapis.com/abernier-portfolio/lebombo_2k.hdr"
-          background
-        /> */}
-        <PerspectiveCamera position={[0, 0, 0]}>
+        <Stars
+          radius={100}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={0}
+          fade
+          speed={1}
+        />
+        <PerspectiveCamera position={[0, -1, 0]}>
           <Particles />
           {/* <BasicParticles /> */}
         </PerspectiveCamera>
