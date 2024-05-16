@@ -1,7 +1,7 @@
-import Particles from 'pages/Particles';
+import Shaders from 'pages/Shaders';
 
-const ParticlesPage = () => {
-  return <Particles />;
+const ShadersPage = () => {
+  return <Shaders />;
 };
 
 export async function getStaticProps() {
@@ -15,4 +15,4 @@ export async function getStaticProps() {
   }
 }
 
-export default ParticlesPage;
+export default ShadersPage;
