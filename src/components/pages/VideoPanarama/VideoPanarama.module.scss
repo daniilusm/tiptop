@@ -1,6 +1,28 @@
 /** @format */
 
 .root {
+  position: relative;
   width: 100vw;
   height: 100vh;
+}
+
+.wrapper {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 400px;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.form {
+  display: flex;
+
+  input {
+    background-color: white;
+  }
 }

@@ -1,10 +1,29 @@
 /** @format */
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import { Dashboard } from '@uppy/react';
+import Uppy from '@uppy/core';
+
+import '@uppy/core/dist/style.min.css';
+import '@uppy/progress-bar/dist/style.min.css';
+
+import '@uppy/core/dist/style.css';
+import '@uppy/dashboard/dist/style.css';
+import '@uppy/drag-drop/dist/style.css';
 
 import s from './VideoPanarama.module.scss';
+import Transloadit from '@uppy/transloadit';
+import { useCallback } from 'react';
+
+const loadTextureAsync = (loader, src, cb) => {
+  loader.loadAsync(src).then(texture => {
+    texture.needsUpdate = true;
+    texture.updateMatrix();
+    cb(texture);
+  });
+};
 
 const Controls = props => {
   const { camera, gl } = useThree();
@@ -20,18 +39,19 @@ const Controls = props => {
   );
 };
 
-const Dome = () => {
-  let src = '/TestRender_1.mp4';
-  //   let src = "https://s.bepro11.com/vr-video-sample.mp4";
-  const video = document.createElement('video');
-  video.src = src;
-  video.loop = true;
-  video.muted = true;
-  video.playsInline = true;
-  video.crossOrigin = 'anonymous';
-  video.play();
+const Dome = ({ videoUrl = '/TestRender_1.mp4' }) => {
+  const videoRef = useRef(document.createElement('video'));
 
-  const texture = new THREE.VideoTexture(video);
+  useEffect(() => {
+    videoRef.current.src = videoUrl;
+    videoRef.current.loop = true;
+    videoRef.current.muted = true;
+    videoRef.current.playsInline = true;
+    videoRef.current.crossOrigin = 'anonymous';
+    // videoRef.current.play();
+  }, [videoUrl]);
+
+  const texture = new THREE.VideoTexture(videoRef.current || {});
 
   return (
     <mesh>
@@ -49,6 +69,40 @@ const Dome = () => {
 };
 
 const VideoPanarama = () => {
+  const [videoUrl, setVideoUrl] = useState(
+    'https://s.bepro11.com/vr-video-sample.mp4'
+  );
+
+  const uppy = useMemo(() => {
+    return new Uppy({
+      id: 'uppy1',
+      autoProceed: false,
+      restrictions: {
+        allowedFileTypes: ['.mp4'],
+      },
+      allowMultipleUploads: false,
+    }).use(Transloadit, {
+      waitForEncoding: true,
+      assemblyOptions: {
+        params: {
+          auth: { key: '054f342a9ebf45d18b3c599e50a60510' },
+          template_id: '498d48ebbca446f88f17508b749a5c85',
+        },
+      },
+    });
+  }, []);
+
+  const setSrc = useCallback(
+    assembly => {
+      setVideoUrl(assembly.uploads[0].ssl_url);
+    },
+    [setVideoUrl]
+  );
+
+  useEffect(() => {
+    uppy.on('transloadit:complete', setSrc);
+  }, [uppy]);
+
   return (
     <div className={s.root}>
       <Canvas camera={{ position: [0, 0, 0.1] }}>
@@ -59,9 +113,21 @@ const VideoPanarama = () => {
           dampingFactor={0.2}
         />
         <Suspense fallback={null}>
-          <Dome />
+          <Dome videoUrl={videoUrl} />
         </Suspense>
       </Canvas>
+      <div className={s.wrapper}>
+        <Dashboard
+          height={200}
+          uppy={uppy}
+          plugins={[]}
+          proudlyDisplayPoweredByUppy={false}
+          showProgressDetails={true}
+          hideUploadButton={false}
+          allowMultipleUploads={false}
+          target="body"
+        />
+      </div>
     </div>
   );
 };
