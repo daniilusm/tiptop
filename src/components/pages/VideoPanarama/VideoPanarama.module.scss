@@ -26,3 +26,22 @@
     background-color: white;
   }
 }
+
+.videoControls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.buttonPlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.441);
+  border-radius: 10px;
+  padding: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+}

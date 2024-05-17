@@ -1,10 +1,20 @@
 /** @format */
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Dashboard } from '@uppy/react';
 import Uppy from '@uppy/core';
+import Transloadit from '@uppy/transloadit';
+
+import VideoPanaramaProvider, { useVideo } from './Provider';
 
 import '@uppy/core/dist/style.min.css';
 import '@uppy/progress-bar/dist/style.min.css';
@@ -14,15 +24,30 @@ import '@uppy/dashboard/dist/style.css';
 import '@uppy/drag-drop/dist/style.css';
 
 import s from './VideoPanarama.module.scss';
-import Transloadit from '@uppy/transloadit';
-import { useCallback } from 'react';
 
-const loadTextureAsync = (loader, src, cb) => {
-  loader.loadAsync(src).then(texture => {
-    texture.needsUpdate = true;
-    texture.updateMatrix();
-    cb(texture);
-  });
+const VideoControls = () => {
+  const { video } = useVideo();
+  const [isPlaying, setIsPlaing] = useState(false);
+
+  const togglePlay = useCallback(() => {
+    if (video.current.current) {
+      if (!isPlaying) {
+        video.current.current.play();
+      } else {
+        video.current.current.pause();
+      }
+      setIsPlaing(!video.current.current.paused);
+    }
+  }, [video, isPlaying]);
+
+  return (
+    <div
+      className={s.buttonPlay}
+      onClick={togglePlay}
+    >
+      {isPlaying ? 'pause' : 'play'}
+    </div>
+  );
 };
 
 const Controls = props => {
@@ -40,6 +65,7 @@ const Controls = props => {
 };
 
 const Dome = ({ videoUrl = '/TestRender_1.mp4' }) => {
+  const { video } = useVideo();
   const videoRef = useRef(document.createElement('video'));
 
   useEffect(() => {
@@ -48,7 +74,7 @@ const Dome = ({ videoUrl = '/TestRender_1.mp4' }) => {
     videoRef.current.muted = true;
     videoRef.current.playsInline = true;
     videoRef.current.crossOrigin = 'anonymous';
-    // videoRef.current.play();
+    video.current = videoRef;
   }, [videoUrl]);
 
   const texture = new THREE.VideoTexture(videoRef.current || {});
@@ -104,31 +130,36 @@ const VideoPanarama = () => {
   }, [uppy]);
 
   return (
-    <div className={s.root}>
-      <Canvas camera={{ position: [0, 0, 0.1] }}>
-        <Controls
-          enableZoom={false}
-          enablePan={false}
-          enableDamping
-          dampingFactor={0.2}
-        />
-        <Suspense fallback={null}>
-          <Dome videoUrl={videoUrl} />
-        </Suspense>
-      </Canvas>
-      <div className={s.wrapper}>
-        <Dashboard
-          height={200}
-          uppy={uppy}
-          plugins={[]}
-          proudlyDisplayPoweredByUppy={false}
-          showProgressDetails={true}
-          hideUploadButton={false}
-          allowMultipleUploads={false}
-          target="body"
-        />
+    <VideoPanaramaProvider>
+      <div className={s.root}>
+        <Canvas camera={{ position: [0, 0, 0.1] }}>
+          <Controls
+            enableZoom={false}
+            enablePan={false}
+            enableDamping
+            dampingFactor={0.2}
+          />
+          <Suspense fallback={null}>
+            <Dome videoUrl={videoUrl} />
+          </Suspense>
+        </Canvas>
+        <div className={s.wrapper}>
+          <Dashboard
+            height={160}
+            uppy={uppy}
+            plugins={[]}
+            proudlyDisplayPoweredByUppy={false}
+            showProgressDetails={true}
+            hideUploadButton={false}
+            allowMultipleUploads={false}
+            target="body"
+          />
+        </div>
+        <div className={s.videoControls}>
+          <VideoControls />
+        </div>
       </div>
-    </div>
+    </VideoPanaramaProvider>
   );
 };
 
