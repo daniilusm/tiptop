@@ -107,6 +107,7 @@ const VideoPanarama = () => {
         allowedFileTypes: ['.mp4'],
       },
       allowMultipleUploads: false,
+      maxNumberOfFiles: 1,
     }).use(Transloadit, {
       waitForEncoding: true,
       assemblyOptions: {
