@@ -95,9 +95,7 @@ const Dome = ({ videoUrl = '/TestRender_1.mp4' }) => {
 };
 
 const VideoPanarama = () => {
-  const [videoUrl, setVideoUrl] = useState(
-    'https://s.bepro11.com/vr-video-sample.mp4'
-  );
+  const [videoUrl, setVideoUrl] = useState('/TestRender_1.mp4');
 
   const uppy = useMemo(() => {
     return new Uppy({
